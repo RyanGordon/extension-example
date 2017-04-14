@@ -1,12 +1,10 @@
 <?hh
-<<__Native>>
-function shfifo_init(string $name): bool;
 
-<<__Native>>
-function shfifo_push(string $pool_name, string $value): bool;
+<<__Native>> function shfifo_init(string $name): bool;
 
-<<__Native>>
-function shfifo_pop(string $pool_name): ?string;
+<<__Native>> function shfifo_push(string $pool_name, string $value): bool;
+
+<<__Native>> function shfifo_pop(string $pool_name): ?string;
 
 class SharedFifo {
 

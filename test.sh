@@ -7,12 +7,10 @@ if [ ! -z "${REALPATH}" ]; then
 fi
 
 if [ "$HPHP_HOME" != "" ]; then
-    HHVM="${HPHP_HOME}/hphp/hhvm/hhvm"
+    HHVM="${HPHP_HOME}/target/usr/local/bin/hhvm"
 else
     HHVM=hhvm
 fi
 
-$HHVM \
-  -vDynamicExtensions.0=${DIRNAME}/shared_pool.so \
-  ${DIRNAME}/test.php
+$HHVM -vDynamicExtensions.0=${DIRNAME}/shared_fifo.so ${DIRNAME}/test.php
 
