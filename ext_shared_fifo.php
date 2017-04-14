@@ -4,6 +4,9 @@
 function shfifo_init(string $name): bool;
 
 <<__Native>>
+function shfifo_size(string $queue_name): int;
+
+<<__Native>>
 function shfifo_push(string $queue_name, string $value): bool;
 
 <<__Native>>
@@ -11,10 +14,17 @@ function shfifo_pop(string $queue_name): ?string;
 
 class SharedFifo {
 
-	// This will create a shared fifo if it does not already exist. If it does exist then it won't do anything.
-	// This is a fast operation
+	/*
+	 * This will create a shared fifo if it does not already exist, accessible between threads.
+	 * If it does exist then it won't do anything. This is a fast operation.
+	 */
 	public function __construct(private string $name) {
 		shfifo_init($name);
+	}
+
+	// This will return the current size of the fifo
+	public function size(): int {
+		return shfifo_size($this->name);
 	}
 
 	// This will push a value onto the shared fifo

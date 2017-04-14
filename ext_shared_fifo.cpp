@@ -23,13 +23,17 @@
 
 namespace HPHP {
 
-
 class SharedFifo {
   ReadWriteMutex fifo_queue_mutex;
   const String& name;
   std::queue<std::string> fifo_queue;
 public:
   SharedFifo(const String& _name) : name(_name) { }
+
+  int64_t size() {
+    ReadLock read_lock(fifo_queue_mutex);
+    return fifo_queue.size();
+  }
 
   void push(const String& value) {
     WriteLock write_lock(fifo_queue_mutex);
@@ -44,11 +48,10 @@ public:
     }
 
     const std::string value = fifo_queue.front();
-  fifo_queue.pop();
-  return Variant(String(value));
-   }
+    fifo_queue.pop();
+    return Variant(String(value));
+  }
 };
-
 
 static ReadWriteMutex shared_fifo_mutex;
 static std::unordered_map<std::string, SharedFifo*> shared_fifos;
@@ -63,7 +66,7 @@ static bool HHVM_FUNCTION(shfifo_init, const String& name) {
   }
 
   {
-  WriteLock write_lock(shared_fifo_mutex);
+    WriteLock write_lock(shared_fifo_mutex);
 
     // Have to gate against a race condition by checking if it was just created here!
     std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(cpp_name);
@@ -83,6 +86,14 @@ static bool HHVM_FUNCTION(shfifo_push, const String& queue_name, const String& v
   shared_fifo->second->push(value);
 
   return true;
+}
+
+static int64_t HHVM_FUNCTION(shfifo_size, const String& queue_name) {
+  ReadLock read_lock(shared_fifo_mutex);
+  std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(queue_name.toCppString());
+  if (shared_fifo == shared_fifos.end()) return false;
+
+  return shared_fifo->second.size();
 }
 
 static Variant HHVM_FUNCTION(shfifo_pop, const String& queue_name, const String& value) {
