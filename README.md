@@ -1,4 +1,4 @@
-extension-example
+hhvm-shared-fifo-ext
 =================
 
-This is a basic dynamically loadable extension for [HHVM's Extension API](https://github.com/facebook/hhvm/wiki/Extension%20API).
+This is a simple extension for HHVM that implements a simple FIFO in shared-memory (accessible cross-threads).

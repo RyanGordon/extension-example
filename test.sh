@@ -13,6 +13,6 @@ else
 fi
 
 $HHVM \
-  -vDynamicExtensions.0=${DIRNAME}/example.so \
+  -vDynamicExtensions.0=${DIRNAME}/shared_pool.so \
   ${DIRNAME}/test.php
 

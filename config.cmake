@@ -1,2 +1,2 @@
-HHVM_EXTENSION(example example.cpp)
-HHVM_SYSTEMLIB(example ext_example.php)
+HHVM_EXTENSION(shared_fifo shared_fifo.cpp)
+HHVM_SYSTEMLIB(shared_fifo ext_shared_fifo.php)
