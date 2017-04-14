@@ -75,9 +75,9 @@ static bool HHVM_FUNCTION(shfifo_init, const String& name) {
   return true;
 }
 
-static bool HHVM_FUNCTION(shfifo_push, const String& pool_name, const String& value) {
+static bool HHVM_FUNCTION(shfifo_push, const String& queue_name, const String& value) {
   ReadLock read_lock(shared_fifo_mutex);
-  std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(pool_name.toCppString());
+  std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(queue_name.toCppString());
   if (shared_fifo == shared_fifos.end()) return false;
 
   shared_fifo->second->push(value);
@@ -85,9 +85,9 @@ static bool HHVM_FUNCTION(shfifo_push, const String& pool_name, const String& va
   return true;
 }
 
-static Variant HHVM_FUNCTION(shfifo_pop, const String& pool_name, const String& value) {
+static Variant HHVM_FUNCTION(shfifo_pop, const String& queue_name, const String& value) {
   ReadLock read_lock(shared_fifo_mutex);
-  std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(pool_name.toCppString());
+  std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(queue_name.toCppString());
   if (shared_fifo == shared_fifos.end()) return Variant(false);
 
   return shared_fifo->second->pop();

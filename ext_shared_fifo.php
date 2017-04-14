@@ -1,17 +1,20 @@
 <?hh
 
-<<__Native>> function shfifo_init(string $name): bool;
+<<__Native>>
+function shfifo_init(string $name): bool;
 
-<<__Native>> function shfifo_push(string $pool_name, string $value): bool;
+<<__Native>>
+function shfifo_push(string $queue_name, string $value): bool;
 
-<<__Native>> function shfifo_pop(string $pool_name): ?string;
+<<__Native>>
+function shfifo_pop(string $queue_name): ?string;
 
 class SharedFifo {
 
 	// This will create a shared fifo if it does not already exist. If it does exist then it won't do anything.
 	// This is a fast operation
 	public function __construct(private string $name) {
-		shpool_init($name);
+		shfifo_init($name);
 	}
 
 	// This will push a value onto the shared fifo
