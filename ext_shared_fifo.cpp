@@ -93,7 +93,7 @@ static int64_t HHVM_FUNCTION(shfifo_size, const String& queue_name) {
   std::unordered_map<std::string, SharedFifo *>::const_iterator shared_fifo = shared_fifos.find(queue_name.toCppString());
   if (shared_fifo == shared_fifos.end()) return false;
 
-  return shared_fifo->second.size();
+  return shared_fifo->second->size();
 }
 
 static Variant HHVM_FUNCTION(shfifo_pop, const String& queue_name, const String& value) {
